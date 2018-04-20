@@ -14,7 +14,7 @@ mongoose.Query.prototype.cache = function(){
 }
 
 mongoose.Query.prototype.exec = async function() {
-    
+
  if(!this.useCache){
     console.log(`this.useCache:${this.useCache || false}`);
     return exec.apply(this,arguments);
@@ -38,7 +38,9 @@ mongoose.Query.prototype.exec = async function() {
   }
   // Otherwise, issue the query and store the result in redis
   const result = await exec.apply(this, arguments);
-  client.set(key,JSON.stringify(result));
+  
+  // set the expiration time to 10 ms 
+  client.set(key,JSON.stringify(result),'EX', 10);
 
   return result;
 };
