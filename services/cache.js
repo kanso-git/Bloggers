@@ -16,8 +16,8 @@ mongoose.Query.prototype.cache = function(options = {}){
 
 mongoose.Query.prototype.exec = async function() {
 
+  console.log(` ${this.mongooseCollection.name} useCache:${this.useCache || false}`);
  if(!this.useCache){
-    console.log(`this.useCache:${this.useCache || false}`);
     return exec.apply(this,arguments);
  }
     // this = Query
@@ -47,7 +47,8 @@ mongoose.Query.prototype.exec = async function() {
 };
 
 function clearHash(hashKey){
- client.del(JSON.stringify(hashKey))
+  console.log(`clear cache for ${hashKey}`);
+  client.del(JSON.stringify(hashKey))
 }
 
 module.exports ={
