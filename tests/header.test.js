@@ -17,12 +17,14 @@ test('The header text is equal to Blogster ', async ()=>{
 test('Clicking login starts oauth flow', async ()=>{
  await page.click('.right a');
  const url =await page.url();
- console.log(url);
+ expect(url).toMatch(/accounts\.google\.com/);
 });
 
 test('When signed in, shows logout button', async () =>{
     await page.login();
-
+    await page.waitFor('a[href="/auth/logout"]');
+    const text = await page.getContentOf('a[href="/auth/logout');
+    expect(text).toEqual('Logout');
  });
 afterEach(async ()=>{
     await page.close();
